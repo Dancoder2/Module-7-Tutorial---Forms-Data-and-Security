@@ -1,0 +1,33 @@
+{% extends "Assignment/base.html" %} 
+
+{% block content %}
+<div class="container py-5 d-flex justify-content-center">
+    
+    <div class="card shadow-sm border-0" style="max-width: 600px; width: 100%;">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Create a New Post</h3>
+        </div>
+
+        <div class="card-body p-4">
+            <form method="POST" class="post-form">
+                {% csrf_token %}
+
+                <div class="form-floating mb-3">
+                    {{ form.title }}
+                    <label for="{{ form.title.id_for_label }}">Post Title</label>
+                </div>
+
+                <div class="form-floating mb-4">
+                    {{ form.text }}
+                    <label for="{{ form.text.id_for_label }}">Write your content</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                    <i class="bi bi-save"></i> Save Post
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "Assignment/base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0">
+        <div class="card-body p-4 p-md-5">
+          <!-- Header / Actions -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            {% if post.published_date %}
+            <small class="text-muted">
+              Published on {{ post.published_date }}
+            </small>
+            {% else %}
+            <form
+              method="post"
+              action="{% url 'post_publish' pk=post.pk %}"
+              class="d-inline"
+            >
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-secondary">
+                Publish
+              </button>
+            </form>
+
+            {% endif %}
+             {% if user.is_authenticated %}
+            <form
+              method="post"
+              action="{% url 'post_remove' pk=post.pk %}"
+              class="d-inline"
+            >
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-danger">
+                <i class="bi bi-trash3"></i> Delete
+              </button>
+            </form>
+            {% endif %}
+          </div>
+
+          <!-- Title -->
+          <h1 class="fw-bold mb-4">{{ post.title }}</h1>
+
+          <!-- Content -->
+          <div class="fs-5 text-secondary lh-lg">
+            {{ post.text|linebreaksbr }}
+          </div>
+
+          <hr class="my-4" />
+
+          <!-- Footer -->
+          <a href="{% url 'post_list' %}" class="btn btn-secondary">
+            ← Back to posts
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="my-4">
+
+<h5 class="fw-bold mb-3">Comments</h5>
+
+
+<a class="btn btn-secondary" role="button" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+{% for comment in post.comments.all %}
+    <div class="card mb-3 shadow-sm mt-3">
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong class="text-primary">
+                    {{ comment.author }}
+                </strong>
+                <small class="text-muted">
+                    {{ comment.created_date }}
+                </small>
+            </div>
+
+            <p class="mb-0">
+                {{ comment.text|linebreaks }}
+            </p>
+
+        </div>
+    </div>
+{% empty %}
+    <div class="alert alert-secondary text-center mt-4">
+        No comments yet. Be the first to comment 🙂
+    </div>
+{% endfor %}
+
+{% endblock %}
